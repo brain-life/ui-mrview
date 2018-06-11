@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#should I do this on startvnc?
+vglclient &
+
+XFCE_PANEL_MIGRATE_DEFAULT=true startxfce4 &
+
+vglrun mrview `find /input -name *.nii.gz` &
+sleep 1
+wmctrl -i -r 0x01400006 -b add,fullscreen
+
+#run it for an hour
+sleep 3600
