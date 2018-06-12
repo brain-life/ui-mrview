@@ -14,7 +14,6 @@ RUN apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32
 RUN apt-get update && apt-get install -y mrtrix
 RUN apt-get install -y wmctrl
 
-#RUN wget https://sourceforge.net/projects/virtualgl/files/2.5.2/virtualgl_2.5.2_amd64.deb/download -O virtualgl.deb && dpkg -i virtualgl.deb
 ADD virtualgl_2.5.2_amd64.deb /
 RUN dpkg -i /virtualgl_2.5.2_amd64.deb
 
