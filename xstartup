@@ -4,10 +4,25 @@
 vglclient &
 
 XFCE_PANEL_MIGRATE_DEFAULT=true startxfce4 &
+export PATH=$PATH:/mrtrix3/bin
 
-vglrun mrview `find /input -name *.nii.gz` &
-sleep 1
-wmctrl -i -r 0x01400006 -b add,fullscreen
+if [ -f /input/t1.nii.gz ]; then
+    vglrun mrview -load /input/t1.nii.gz -fullscreen &
+fi
+if [ -f /input/t2.nii.gz ]; then
+    vglrun mrview -load /input/t2.nii.gz -fullscreen &
+fi
+if [ -f /input/dwi.nii.gz ]; then
+    vglrun mrview -load /input/dwi.nii.gz -fullscreen &
+fi
+if [ -f /input/track.tck ]; then
+    tcpmap -vox 1,1,1 /input/track.tck /tmp/mask.nii.gz
+    vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/track.tck -fullscreen &
+fi
+
+#vglrun mrview `find /input -name *.nii.gz` &
+#sleep 1
+#wmctrl -i -r 0x01400006 -b add,fullscreen
 
 #run it for an hour
 sleep 3600
