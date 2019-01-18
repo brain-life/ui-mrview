@@ -9,20 +9,27 @@ export PATH=$PATH:/mrtrix3/bin
 if [ -f /input/t1.nii.gz ]; then
     vglrun mrview -load /input/t1.nii.gz -fullscreen &
 fi
+
 if [ -f /input/t2.nii.gz ]; then
     vglrun mrview -load /input/t2.nii.gz -fullscreen &
 fi
+
 if [ -f /input/dwi.nii.gz ]; then
     vglrun mrview -load /input/dwi.nii.gz -fullscreen &
 fi
+
 if [ -f /input/track.tck ]; then
     tckmap -vox 1,1,1 /input/track.tck /tmp/mask.nii.gz
     vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/track.tck -fullscreen &
 fi
 
-#vglrun mrview `find /input -name *.nii.gz` &
-#sleep 1
-#wmctrl -i -r 0x01400006 -b add,fullscreen
+#TODO - we should use a single mrview and open 3 tracks..
+for type in DT_STREAM SD_STREAM SD_PROB
+do
+    if [ -f /input/output.$type.tck ]; then
+        tckmap -vox 1,1,1 /input/output.$type.tck /tmp/mask.nii.gz
+        vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/output.$type.tck -fullscreen &
+    fi
+done
 
-#run it for an hour
 sleep 3600
