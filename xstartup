@@ -4,14 +4,45 @@
 vglclient &
 
 XFCE_PANEL_MIGRATE_DEFAULT=true startxfce4 &
+export PATH=$PATH:/mrtrix3/bin
 
-vglrun mrview `find /input -name *.nii.gz` &
-pid=$!
-sleep 2
-#find the window id
-id=`wmctrl -pl | grep " $pid " | cut -f 1 -d " "`
-echo $id > /id.txt
-wmctrl -i -r $id -b add,fullscreen
+#vglrun mrview `find /input -name *.nii.gz` &
+if [ -f /input/t1.nii.gz ]; then
+    vglrun mrview -load /input/t1.nii.gz -fullscreen &
+fi
 
-#run it for an hour
+if [ -f /input/t2.nii.gz ]; then
+    vglrun mrview -load /input/t2.nii.gz -fullscreen &
+fi
+
+if [ -f /input/dwi.nii.gz ]; then
+    vglrun mrview -load /input/dwi.nii.gz -fullscreen &
+fi
+
+if [ -f /input/bold.nii.gz ]; then
+    vglrun mrview -load /input/bold.nii.gz -fullscreen &
+fi
+
+if [ -f /input/track.tck ]; then
+    tckmap -vox 1,1,1 /input/track.tck /tmp/mask.nii.gz
+    vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/track.tck -fullscreen &
+fi
+
+#TODO - we should use a single mrview and open 3 tracks..
+for type in DT_STREAM SD_STREAM SD_PROB
+do
+    if [ -f /input/output.$type.tck ]; then
+        tckmap -vox 1,1,1 /input/output.$type.tck /tmp/mask.nii.gz
+        vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/output.$type.tck -fullscreen &
+    fi
+done
+
+#wait for mrview to start
+#sleep 2
+
+#find the window id (-fullscreen option should take care of this)
+#id=`wmctrl -pl | grep " $pid " | cut -f 1 -d " "`
+#echo $id > /id.txt
+#wmctrl -i -r $id -b add,fullscreen
+
 sleep 3600
