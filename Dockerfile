@@ -6,7 +6,7 @@ EXPOSE 5900
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    vim mesa-utils tightvncserver xfce4 
+    vim mesa-utils tightvncserver xfce4 wget 
 
 #install neurodebian and mrtrix
 RUN wget -O- http://neuro.debian.net/lists/xenial.us-tn.full | tee /etc/apt/sources.list.d/neurodebian.sources.list

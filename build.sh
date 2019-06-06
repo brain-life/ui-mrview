@@ -1,5 +1,4 @@
+set -e
 docker build -t soichih/vncserver-mrview .
-if [ $? -eq 0 ];
-then
-    docker push soichih/vncserver-mrview
-fi
+docker tag soichih/vncserver-mrview soichih/vncserver-mrview:2
+docker push soichih/vncserver-mrview:2

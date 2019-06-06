@@ -6,8 +6,12 @@ vglclient &
 XFCE_PANEL_MIGRATE_DEFAULT=true startxfce4 &
 
 vglrun mrview `find /input -name *.nii.gz` &
-sleep 1
-wmctrl -i -r 0x01400006 -b add,fullscreen
+pid=$!
+sleep 2
+#find the window id
+id=`wmctrl -pl | grep " $pid " | cut -f 1 -d " "`
+echo $id > /id.txt
+wmctrl -i -r $id -b add,fullscreen
 
 #run it for an hour
 sleep 3600
