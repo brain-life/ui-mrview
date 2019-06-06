@@ -18,6 +18,10 @@ if [ -f /input/dwi.nii.gz ]; then
     vglrun mrview -load /input/dwi.nii.gz -fullscreen &
 fi
 
+if [ -f /input/bold.nii.gz ]; then
+    vglrun mrview -load /input/bold.nii.gz -fullscreen &
+fi
+
 if [ -f /input/track.tck ]; then
     tckmap -vox 1,1,1 /input/track.tck /tmp/mask.nii.gz
     vglrun mrview -load /tmp/mask.nii.gz -tractography.load /input/track.tck -fullscreen &
